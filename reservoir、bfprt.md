@@ -21,3 +21,54 @@
 但是如果使用蓄水池算法，那么我只需要一台服务器，就给我100个位置每个用户在登录的时候实现两个方法。f1验证你今天是不是首次登录。f2方法得出你是全球第几个（x）登录的用户。如果用户是首次登录，那么就以100/x的概率决定进去，然后从袋子中随机踢出去一个。最后再开奖的时候直接公布这100个人即可。根本不需要各个服务器之间同步数据。稍微有点难度的就是要知道你是全球第几个登录的用户，这个还是相对好实现的。
 
 原本以非常大的代价才能能够搞定的事情，现在变成了动态决定。我就准备只有100个人的空间，这个事情就拿下了。
+
+```java
+public static class RandomBox {
+   private int[] bag;
+   private int N;//袋子的大小
+   private int count;//已经过了count个球
+
+   public RandomBox(int capacity) {
+      bag = new int[capacity];
+      N = capacity;
+      count = 0;
+   }
+
+   private int rand(int max) {
+      return (int) (Math.random() * max) + 1;
+   }
+
+   public void add(int num) {
+      count++;
+      if (count <= N) {
+         bag[count - 1] = num;
+      } else {
+         if (rand(count) <= N) {
+            bag[rand(N) - 1] = num;
+         }
+      }
+   }
+
+   public int[] choices() {
+      int[] ans = new int[N];
+      for (int i = 0; i < N; i++) {
+         ans[i] = bag[i];
+      }
+      return ans;
+   }
+
+}
+```
+
+
+
+# bfprt算法
+
+- 有更好的算法笔试使用。笔试的时候不要使用bfprt算法。这是面试用的
+
+![image-20220916155842116](image/image-20220916155842116.png)
+
+![image-20220916155849864](image/image-20220916155849864.png)
+
+![image-20220916155857839](image/image-20220916155857839.png)
+
