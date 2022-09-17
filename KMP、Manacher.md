@@ -79,6 +79,8 @@ private static int baoli(String str,String match){
 
 ![image-20220916155817670](image/image-20220916155817670.png)
 
+
+
 # Manacher
 
 Manacher算法解决的是最长回文子串是多长。
