@@ -1,0 +1,6 @@
+# 项目排除路径
+/out/
+.xml
+.idea/jpa-buddy.xml
+.idea/misc.xml
+.idea/vcs.xml
