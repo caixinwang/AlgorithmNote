@@ -16,7 +16,7 @@ public class Leetcode_0043_MultiplyStrings {
             }
             ans=add(ans,sb.reverse().toString());
         }
-        return ans.replaceAll("^0+(?!$)","");//去除前导0
+        return ans;
     }
 
     public static String add(String num1, String num2) {
@@ -28,6 +28,14 @@ public class Leetcode_0043_MultiplyStrings {
             carry=sum/10;
             sb.append(sum%10);
         }
-        return sb.reverse().toString();
+        sb.reverse();
+        while(sb.length()>1&&sb.charAt(0)=='0') sb.deleteCharAt(0);//去前导0
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        String ans="1";
+        for (int i=1;i<=100;i++) ans=multiply(ans,String.valueOf(i));
+        System.out.println(ans);
     }
 }

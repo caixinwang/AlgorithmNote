@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .red{background-color:#f00;}
+    .green{background-color: #0f0;}
+    .big{
+      width: 300px;
+      height: 300px;
+    }
+    .small{
+      width: 100px;
+      height: 100px;
+    }
+    .pad {
+      padding-left: 100px;
+      padding-top: 100px;
+      /* 不要给我阔出去，直接利用现有的空间当做padding */
+      box-sizing: border-box;
+    }
+
+    .marl {
+      margin-left: 100px;
+    }
+
+    .mart{
+      margin-top: 100px;
+    }
+
+    .mara{
+      margin: auto;
+    }
+
+    .bor{
+      /* 将父元素设置为一个border可以防止margin的上传递 */
+      border: 1px solid #f00;
+    }
+
+    .over{
+      /* 设置overflow也可以防止margin的传递 */
+      overflow: auto;
+    }
+
+  </style>
+</head>
+<body>
+  <!-- 总结，要居中，如果使用margin，那么需要在父元素设置border或者overflow来组织上传递
+      如果使用padding，那么需要在自身（父）额外设置box-sizing
+    1.父{over||border} 子{mart marl}
+    2.父{pad}
+  -->
+  
+  <div class="red big">
+    <div class="green small "></div>
+  </div>
+
+</body>
+</html>

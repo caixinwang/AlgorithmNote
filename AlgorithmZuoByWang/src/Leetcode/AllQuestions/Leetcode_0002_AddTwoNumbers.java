@@ -36,6 +36,18 @@ public class Leetcode_0002_AddTwoNumbers {//两数相加--链表
         if(carry!=0) pre.next=new ListNode(carry);
         return head;
     }
-
+    public ListNode addTwoNumbers2(ListNode l1, ListNode l2) {
+        ListNode dummy=new ListNode(),head=dummy;
+        int c=0;
+        while(l1!=null||l2!=null||c!=0){//加起来还有值
+            int n1=l1==null?0:l1.val,n2=l2==null?0:l2.val;
+            head.next=new ListNode((n1+n2+c)%10);
+            c=(n1+n2+c)/10;
+            head=head.next;
+            if(l1!=null)l1=l1.next;
+            if(l2!=null)l2=l2.next;
+        }
+        return dummy.next;
+    }
 
 }

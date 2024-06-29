@@ -44,6 +44,16 @@ public class Code01_MergeSort {
         }
     }
 
+    private static void merge1(int[] arr,int l,int m,int r){
+        int[] help=new int[r-l+1];
+        int p0=l,p1=m+1,index=0;
+        while(p0<=m||p1<=r){
+            if(p0<=m&&p1<=r) help[index++]=arr[p0]<=arr[p1]?arr[p0++]:arr[p1++];
+            else help[index++]=p0<=m?arr[p0++]:arr[p1++];
+        }
+        for(int i=0;i<help.length;i++) arr[i+l]=help[i];
+    }
+
     private static void mergeSort2(int[] arr){
         if (arr==null||arr.length<2)
             return;

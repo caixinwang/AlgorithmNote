@@ -131,17 +131,13 @@ public class Leetcode_0010_RegularExpressionMatching {//IC16
 	public boolean isMatch5(String s, String p) {//直接写dp
 		int n=s.length(),m=p.length();
 		char[] ss=s.toCharArray(),pp=p.toCharArray();
-		boolean[][] dp=new boolean[n+1][m+1];
+		boolean[][] dp=new boolean[n+1][m+1];//[i][j] i和j代表长度
 		dp[0][0]=true;//第一列，p串没有了，s还有，那么就是false。只有两个都没有了才是true
 		for(int j=1;j<=m;j++) dp[0][j]=pp[j-1]=='*'&&dp[0][j-2];//第一行。ss没有了，pp还有，只有在pp[j-1]是*才有救
 		for(int i=1;i<=n;i++){
-			for(int j=1;j<=m;j++){
-				if(pp[j-1]=='*'){
-					dp[i][j]=dp[i][j-2];//一个都不匹配
-					if(ss[i-1]==pp[j-2]||pp[j-2]=='.') dp[i][j]|=dp[i-1][j];//至少匹配一个，可以斜率优化
-				}else{
-					dp[i][j]=(ss[i-1]==pp[j-1]||pp[j-1]=='.')&&dp[i-1][j-1];
-				}
+			for(int j=1;j<=m;j++){//按照*来分类讨论。是*又分为匹配和不匹配两种
+				if(pp[j-1]=='*') dp[i][j]=dp[i][j-2]||(ss[i-1]==pp[j-2]||pp[j-2]=='.')&&dp[i-1][j];
+				else dp[i][j]=(ss[i-1]==pp[j-1]||pp[j-1]=='.')&&dp[i-1][j-1];
 			}
 		}
 		return dp[n][m];

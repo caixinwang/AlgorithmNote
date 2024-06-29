@@ -59,7 +59,17 @@ public class Leetcode_0340_LongestSubstringWithAtMostKDistinctCharacters {
 		}
 		return ans;
 	}
-
+	public int lengthOfLongestSubstringKDistinct3(String s, int k) {
+		char[] str=s.toCharArray();
+		int[] cnt=new int[128];
+		int diff=0,ans=0,n=str.length;
+		for(int l=0,r=0;r<n;r++){
+			if(cnt[str[r]]++==0) diff++;
+			while(diff>k) if(--cnt[str[l++]]==0) diff--;
+			if(r-l+1>ans) ans=r-l+1;
+		}
+		return ans;
+	}
 	public static void testForString() {//参数为String
 		StringUtil stringUtil = new StringUtil();
 		int times = 100000;//测试次数

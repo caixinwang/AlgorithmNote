@@ -1,6 +1,7 @@
 package Leetcode.AllQuestions;
 
 public class Leetcode_0159_LengthOfLongestSubstringTwoDistinct {
+    //给你一个字符串 s ，请你找出 至多 包含 两个不同字符 的最长 子串，并返回该子串的长度。
     public int lengthOfLongestSubstringTwoDistinct(String s) {
         char[] str=s.toCharArray();
         int ans=0,n=str.length,diff=0;

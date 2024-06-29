@@ -35,7 +35,7 @@ public class Code03_HeapSort {
             int child = 2 * k;//左孩子
             if (child + 1 <= N && more(arr, child + 1, child)) child++;//右孩子存在并且比左孩子大的时候j才等于2*k+1
             if (more(arr, k, child)) break;//如果比最大的孩子还大那么就不需要交换了
-            else swap(arr,k,child);
+            swap(arr,k,child);
             k=child;
         }
     }

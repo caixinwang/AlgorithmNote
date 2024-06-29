@@ -20,8 +20,8 @@ public class Leetcode_0148_SortList {
                 nodes=getHead2KGroup(head1,step);
                 merge=merge(head1,nodes[0]);
                 cur.next=merge[0];
+                merge[1].next=nodes[1];
                 cur=merge[1];
-                cur.next=nodes[1];
                 head1=nodes[1];
             }
         }
@@ -70,11 +70,35 @@ public class Leetcode_0148_SortList {
         return new ListNode[]{dummy.next,cur};
     }
 
+    //自顶向下的归并
+    public ListNode sortList2(ListNode head) {
+        if(head==null||head.next==null) return head;
+        ListNode s,f,p;
+        for(s=f=head,p=null;f!=null&&f.next!=null;p=s,s=s.next,f=f.next.next);
+        p.next=null;
+        return merge2(sortList(head),sortList(s));
+    }
+
+    public ListNode merge2(ListNode h1,ListNode h2){
+        ListNode dummy=new ListNode(),cur;
+        for(cur=dummy;h1!=null&&h2!=null;cur=cur.next){
+            if(h1.val<=h2.val){
+                cur.next=h1;
+                h1=h1.next;
+            }else{
+                cur.next=h2;
+                h2=h2.next;
+            }
+        }
+        cur.next=h1!=null?h1:h2;
+        return dummy.next;
+    }
+
     public static void main(String[] args) {
-        ListNode head=new ListNode(4);
+        ListNode head=new ListNode(4),cur;
         head.next=new ListNode(2);
         head.next.next=new ListNode(1);
         head.next.next.next=new ListNode(3);
-        sortList(head);
+        for (cur=sortList(head);cur!=null;cur=cur.next) System.out.println(cur.val);
     }
 }

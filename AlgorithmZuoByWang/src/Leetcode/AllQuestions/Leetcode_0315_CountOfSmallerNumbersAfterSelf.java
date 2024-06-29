@@ -55,6 +55,63 @@ public class Leetcode_0315_CountOfSmallerNumbersAfterSelf {
         return list;
     }
 
+    public List<Integer> countSmaller4(int[] nums) {
+        LinkedList<Integer> ans=new LinkedList<>();
+        SegmentTree st=new SegmentTree(3*10000);
+        int n=nums.length;
+        for(int i=0;i<n;i++) nums[i]+=10001;
+        ans.addFirst(0);
+        st.add(nums[n-1],1);
+        for(int i=n-2;i>=0;i--){
+            ans.addFirst(st.query(1,nums[i]-1));
+            st.add(nums[i],1);
+        }
+        return ans;
+    }
+
+    class SegmentTree{
+        class Node{
+            Node left,right;
+            int sum=0;
+        }
+
+        Node root;
+        int size;
+
+        public SegmentTree(int size){//1~size的表示范围
+            this.size=size;
+            root=new Node();
+        }
+
+        public void add (int i,int v){add(i,v,root,1,size);};
+
+        public void add(int i,int v,Node c,int l,int r){
+            if(l==r&&l==i){//递归到底
+                c.sum+=v;
+                return;
+            }
+            int m=l+(r-l>>1);
+            if(i<=m) {
+                if(c.left==null) c.left=new Node();
+                add(i,v,c.left,l,m);
+            }else {
+                if(c.right==null) c.right=new Node();
+                add(i,v,c.right,m+1,r);
+            }
+            c.sum=(c.left==null?0:c.left.sum)+(c.right==null?0:c.right.sum);
+        }
+
+        public int query(int L,int R){return query(L,R,root,1,size);}
+
+        public int query(int L,int R,Node c,int l,int r){
+            if(c==null||R<l||L>r) return 0;
+            if(L<=l&&R>=r) return c.sum;
+            int m=l+(r-l>>1);
+            return query(L,R,c.left,l,m)+query(L,R,c.right,m+1,r);
+        }
+
+    }
+
     /**
      * 归并排序的思想，在merge的过程中产生答案。需要解决的问题是arr在排序的过程中，已经不是原来的样子了，
      * 所以我们需要建立一个映射机制，让我们可以直接从排序过的下标映射到没排序之前的下标。

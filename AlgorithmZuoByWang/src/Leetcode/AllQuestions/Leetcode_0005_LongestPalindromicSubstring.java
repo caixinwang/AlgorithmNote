@@ -11,7 +11,7 @@ public class Leetcode_0005_LongestPalindromicSubstring {//最长回文子串问�
         int maxIndex=0;//从哪个位置扩出来的最长
         int max=0;//在这个位置的回文半径是多少
         for (int i = 0; i < str.length; i++) {
-            int p=i<r?Math.min(parr[2*c-i],r-i):0;//当前位置阔出去的回文半径
+            int p=i<r?Math.min(parr[2*c-i],r-i):0;//如果i在r内，对称点2*c-i可以帮助，但是不能超过r。i<r和i<=r都对
             while(i+p+1<str.length&&i-p-1>=0&&str[i+p+1]==str[i-p-1]) p++;//最后一个合格的位置
             parr[i]=p;
             if (i+p>r){
@@ -37,7 +37,7 @@ public class Leetcode_0005_LongestPalindromicSubstring {//最长回文子串问�
         int[] pArr=new int[n];
         for(int i=0;i<n;i++){
             p=i<r?Math.min(r-i,pArr[2*c-i]):0;//确定以i为中心的起始回文半径,r大于i才让你帮助
-            while(i+p+1<n&&i-p-1>=0&&str[i+p+1]==str[i-p-1]) p++;//找最后一个失败的地方
+            while(i+p+1<n&&i-p-1>=0&&str[i+p+1]==str[i-p-1]) p++;//匹配失败就跳出
             pArr[i]=p;
             if(i+p>r){
                 r=p;

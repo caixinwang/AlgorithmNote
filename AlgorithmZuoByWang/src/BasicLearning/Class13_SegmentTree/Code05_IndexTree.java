@@ -2,57 +2,27 @@ package BasicLearning.Class13_SegmentTree;
 
 public class Code05_IndexTree {
 
-	public static class IndexTree {//sum
-		int N;
+	public static class IndexTree {
 		int[] sum;
-
-		public IndexTree(int N){
-			this.N=N;
-			sum =new int[N+1];
+		public IndexTree(int size){
+			sum=new int[size+1];
 		}
 
-		public int sum(int index){//1~index的累加和
+		public void add(int i,int v){
+			for(;i<=sum.length;i+=i&-i) sum[i]+=v;
+		}
+
+		public int query(int i){
 			int ans=0;
-			for (;index>0;index-=index&-index){
-				ans+= sum[index];
-			}
+			for(;i>0;i-=i&-i) ans+=sum[i];
 			return ans;
 		}
 
-		public void add(int index,int d){
-			for (;index<=N;index+=index&-index){
-				sum[index]+=d;
-			}
-		}
+		public int query(int L,int R){return query(R)-query(L-1);}
 
 	}
 
-	public static class IndexTree2 {//max
-		int N;
-		int[] max;
-
-		public IndexTree2(int N){
-			this.N=N;
-			max =new int[N+1];
-		}
-
-		public int max(int index){//1~index的max
-			int ans=0;
-			for (;index>0;index-=index&-index){
-				ans = Math.max(ans, max[index]);
-			}
-			return ans;
-		}
-
-		//这里的update不是真正意义上的update，只有d大于等于max[index]原本的值才有效
-		//也就是只能越更越大
-		public void update(int index, int d){
-			for (;index<=N;index+=index&-index){
-				max[index]=Math.max(max[index],d);
-			}
-		}
+	public static void main(String[] args) {
 
 	}
-
-
 }
