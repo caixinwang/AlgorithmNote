@@ -1,22 +1,44 @@
-const IndexTree=function(size){
-  this.indexTree=new Array(size+1)
-  this.size=size
-  this.indexTree.fill(0)
-}
-IndexTree.prototype.add=function(index,d){
-  for(;index<=this.size;index+=index&-index){
+// const IndexTree=function(size){
+//   this.indexTree=new Array(size+1)
+//   this.size=size
+//   this.indexTree.fill(0)
+// }
+// IndexTree.prototype.add=function(index,d){
+//   for(;index<=this.size;index+=index&-index){
+//       this.indexTree[index]+=d
+//   }
+// }
+// IndexTree.prototype.query=function(r){
+//   let res=0
+//   for(;r>=1;r-=r&-r){
+//       res+=this.indexTree[r]
+//   }
+//   return res
+// }
+// IndexTree.prototype.queryRange=function(l,r){
+//   return this.query(r)-this.query(l-1)
+// }
+class IndexTree{
+  constructor(size){
+    this.indexTree=new Array(size+1)
+    this.size=size
+    this.indexTree.fill(0)
+  }
+  add(index,d){
+    for(;index<=this.size;index+=index&-index){
       this.indexTree[index]+=d
+   }
   }
-}
-IndexTree.prototype.query=function(r){
-  let res=0
-  for(;r>=1;r-=r&-r){
-      res+=this.indexTree[r]
+  query(r){
+    let res=0
+    for(;r>=1;r-=r&-r){
+        res+=this.indexTree[r]
+    }
+    return res
   }
-  return res
-}
-IndexTree.prototype.queryRange=function(l,r){
-  return this.query(r)-this.query(l-1)
+  queryRange(l,r){
+    return this.query(r)-this.query(l-1)
+  }
 }
 /**
 * @param {number[]} nums
@@ -26,9 +48,8 @@ IndexTree.prototype.queryRange=function(l,r){
 */
 var reversePairs = function(nums) {
   let res=0
+  let tmp=[...new Set(nums.concat(nums.map(a=>a*2)))].sort((a,b)=>a-b)
   let map=new Map()
-  let tmp=[...new Set([].concat(nums,nums.map(a=>a*2)))]
-  tmp.sort((a,b)=>a<=b?-1:1)
   for(let i=0;i<tmp.length;i++){
       map.set(tmp[i],i+1)
   }
