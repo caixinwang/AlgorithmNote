@@ -1,6 +1,6 @@
 package BasicLearning.Class13_SegmentTree;
 
-public class Code01_SegmentTree2 {//max
+public class Code01_SegmentTreeMax {//max
 
     class SegmentTree{//无懒惰&区间修改&单点修改
         int[] mx;

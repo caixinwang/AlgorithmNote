@@ -1,6 +1,6 @@
 package BasicLearning.Class13_SegmentTree;
 
-public class Code01_SegmentTree {//sum
+public class Code01_SegmentTreeSum {//sum
     /**
      * 每个线段树都自己定制需要维持的数据，这个经典的线段树维持的就是sum这个数据。
      * lzadd、lzupdate、update都是为了sum维持的懒空间，为了提供更高的效率。
@@ -14,36 +14,47 @@ public class Code01_SegmentTree {//sum
         private boolean[] lzupdate;// lzupdate[]为懒更新标记
 
         /**
-         * 假设最后一层刚好装满N个结点，那么总的结点数就是2N-1，我们最少需要2N的空间。如果没有装满，那么就需要大于2N的空间
-         * 假设上一层的结点个数为M<=N,那么总的结点个数就是2*M-1+N，我们至少需要2M+N的空间
-         * 空间比较完美的利用的话就是2^(log2(N)上取整+1)。比较随意的话就直接4N，肯定够用。
-         * @param N 表达的范围有几个数，其实就是origin.len
+         * @param N 创建的线段树管理1~N的任意范围
          */
-        public SegmentTree(int N) {//图省事直接开辟4N大小也ok
+        public SegmentTree(int N) {//直接开辟4N大小来表示完全二叉树
             this.N=N;
-            sum = new int[N<<2]; // 用来支持脑补概念中，某一个范围的累加和信息
-            lzadd = new int[N<<2]; // 用来支持脑补概念中，某一个范围沒有往下傳遞的纍加任務
-            update = new int[N<<2]; // 用来支持脑补概念中，某一个范围有没有更新操作的任务
-            lzupdate = new boolean[N<<2]; // 用来支持脑补概念中，某一个范围更新任务，更新成了什么
+            sum = new int[N<<2]; // 某一个结点的累加和信息
+            lzadd = new int[N<<2]; // 某一个结点沒有往下傳遞的纍加任務
+            update = new int[N<<2]; // 某一个结点有没有更新操作的任务
+            lzupdate = new boolean[N<<2]; // 某一个结点更新成了什么
         }
 
         /**
+         * 构造满二叉树，如果管理1~6，本质上底层是按照1~8来创建的线段树
          * 根据求和公式，满二叉树最后一层如果是all，那么总的结点数量就是all*2-1。
          * all/2是倒二层的最后一个结点，all/2+1就是倒一层的第一个结点，这里从左到右对应origin的每一个数
          * 填完最后一层以后，从倒数第二层倒着pushUp回去，这样就初始化了原始的数据
          * @param origin 原始的数据。有的题目可能没有原始的数据
          */
         public void build(int[] origin){
-            int lay=1;
-            for (;lay<N;lay<<=1);//lay出来刚好大于等于N,作为最后一层的数量
-            int all=2*lay-1;//满二叉树总共的节点数。下标从1开始
-            for (int i=all/2+1,j=0;j<origin.length;i++,j++){
-                sum[i]=origin[j];
-            }
-            for (int i=all>>1;i>=1;i--){
-                pushUp(i);
-            }
+            //满二叉树
+            // int lay=1;
+            // for (;lay<N;lay<<=1);//lay出来刚好大于等于N,作为最后一层的数量
+            // int all=2*lay-1;//满二叉树总共的节点数。下标从1开始
+            // for (int i=all/2+1,j=0;j<origin.length;i++,j++){
+            //     sum[i]=origin[j];
+            // }
+            // for (int i=all>>1;i>=1;i--){
+            //     pushUp(i);
+            // }
+            
+            //完全二叉树
+            build(1,1,N,origin);
         }
+
+        //构造完全二叉树
+        public int build(int rt,int l,int r,int[] origin){
+            if(l>r) return 0;
+            if(l==r) return sum[rt]=origin[l-1];
+            int m=l+(r-l>>1);
+            return sum[rt]=build(rt<<1, l, m, origin)+build(rt<<1|1, m+1, r, origin);
+        }
+
 
         /**
          * 每个不同的题目有不同的pushup，sum的话就是左右孩子相加，如果是max的话就是左右孩子求最大
@@ -150,9 +161,9 @@ public class Code01_SegmentTree {//sum
         int[] sum;
         int N;
 
-        public  SegmentTree2(int N){
+        public SegmentTree2(int N){
             this.N=N;
-            sum =new int[N<<2];
+            sum = new int[N<<2];
         }
 
         public void build(int[] origin){

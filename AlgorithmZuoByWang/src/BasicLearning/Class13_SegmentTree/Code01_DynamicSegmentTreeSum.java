@@ -1,6 +1,6 @@
 package BasicLearning.Class13_SegmentTree;
 
-public class Code01_DynamicSegmentTree {//累加和
+public class Code01_DynamicSegmentTreeSum {//累加和
 
     /**
      * 支持单点增加 + 范围查询的动态开点线段树（累加和）
