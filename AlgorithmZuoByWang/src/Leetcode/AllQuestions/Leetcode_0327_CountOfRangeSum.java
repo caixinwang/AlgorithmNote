@@ -5,6 +5,11 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class Leetcode_0327_CountOfRangeSum {
+    /**
+     * 给你一个整数数组 nums 以及两个整数 lower 和 upper 。
+     * 求数组中，值位于范围 [lower, upper] （包含 lower 和 upper）之内的 区间和的个数 。
+     * 区间和 S(i, j) 表示在 nums 中，位置从 i 到 j 的元素之和，包含 i 和 j (i ≤ j)。
+     */
 
     class SegmentTree {
         int[] sum;
@@ -141,4 +146,80 @@ public class Leetcode_0327_CountOfRangeSum {
         }
         return ans;
     }
+
+    static class SegmentTreeNode2{//动态开点线段树
+        class Node{
+            Node left,right;
+            long sum;
+            Node(long sum){
+                this.sum=sum;
+                left=right=null;
+            }
+        }
+        long size;
+        Node root;
+
+        public SegmentTreeNode2(long size) {
+            this.size=size;
+            root=new Node(0);
+        }
+
+        public void add(long i,long A,long l,long r,Node cur){
+            if(l>r) return;
+            if(l==r) {
+                cur.sum+=A;
+                return;
+            }
+            long mid=(r-l>>1)+l;
+            if(i<=mid){
+                if(cur.left==null)cur.left=new Node(0);
+                add(i,A,l,mid,cur.left);
+            }else{
+                if(cur.right==null)cur.right=new Node(0);
+                add(i,A,mid+1,r,cur.right);
+            }
+            cur.sum=(cur.left==null?0:cur.left.sum)+(cur.right==null?0:cur.right.sum);
+        }
+
+        public void add(long i,long A){
+            add(i,A,1,size,root);
+        }
+
+        public long query(long L,long R,long l,long r,Node cur){
+            if(L<=l&&r<=R) return cur.sum;
+            long mid=(r-l>>1)+l,left=0,right=0;
+            if(L<=mid){
+                if(cur.left==null)cur.left=new Node(0);
+                left=query(L,R,l,mid,cur.left);
+            }
+            if(R>=mid+1){
+                if(cur.right==null)cur.right=new Node(0);
+                right=query(L,R,mid+1,r,cur.right);
+            }
+            return left+right;                        
+        }
+
+        public long query(long L,long R){
+            if(L>R) return 0;
+            return query(L, R, 1, size, root);
+        }
+    }
+    
+    //low<=sum-?<=high  sum-low>=?>=sum-high
+    //不需要离散化，但是题目数据太恶心，所以很慢。要快的还是需要离散化。
+    public int countRangeSum3(int[] arr, int low, int high) {
+        final long t=1L<<58;
+        SegmentTreeNode2 sg=new SegmentTreeNode2(1L<<60);
+        long res=0;
+        long sum=0;
+        sg.add(sum+t,1);
+        for (int i = 0; i < arr.length; i++) {
+            sum+=arr[i];
+            res+=sg.query(sum-high+t,sum-low+t);
+            sg.add(sum+t,1);
+        }
+        return (int)res;
+    }
+
+
 }
