@@ -82,32 +82,26 @@ public class Code06_QuickSort {
      * @param l：进行切分的数组范围的左边界
      * @param r：进行切分的数组范围的右边界
      * @return ：返回切分元素在切分之后排在数组的哪一个位置index
-     * 事实上，p1和p2交叉的时候一定满足p1-1=p2，所以p2是<=num区间的最后一个数，直接与arr[l]交换即可
+     * p1和p2交叉的时候一定满足p2是<=num区间的最后一个数，直接与arr[l]交换即可
      * arr[p1]<num而不是<=，为了防止p2和p1不止错了1格，这样可以保证p2在的位置就是arr[l]应该放的位置。
      * while(++p1<=r&&arr[p1]<num);p1是可能超出r的，这种情况也可以被妥善处理，因为r一定会往左边越一位
      * while(--p2>=l-1&&arr[p2]>num);p2也可能超出l-1来到l位置，此时p2也恰好是arr[l]应该放的位置
+     * 关键：p1和p2交叉的时机就是算法完成的时机，需要妥当的进行swap
+     * A: 如果arr数组中有且仅有一个数等于num，那么在两个while结束以后，p1 p2如果碰撞也只能是p2<p1
+     *      若碰撞时候的数等于num（言外之意不止一个num），那么此时p1=p2.在p1=p2的这种碰撞情况下，大while的条件是否取等号对应的情况有所不同
+     *      如果while取了等号，那么p1=p2的时候和arr[l]换了一次，又进了一次循环，再次前移一次，又和arr[l]换了一次，但是这是不影响的，
+     *          因为两个num紧挨着-不止一个num
+     *      如果while不取等号，那么p1=p2的时候和arr[l]换了一次就退出循环，这也是正确的
      */
     private static int partition2(int[] arr,int l,int r){//由于是在快排中调用，所以r>l，即至少两个元素
         int num=arr[l];//切分元素
-        int p1=l;//从while出来的时候都是小于等于num的，同时p1指向的是>=num的元素。
-        int p2=r+1;//从while出来的时候p2+1~r都是大于等于num的，同时p2指向的是<=num的元素。
-//        while(true){
-//            while(arr[++p1]<num) if (p1==r) break;//防止越界。如果if条件成立，说明数组中所有的数都比num小
-//            while(arr[--p2]>num) if (p2==l) break;//这里的if冗余，因为arr[l]!>arr[l]
-//            if (p1>=p2){//此时arr[p2+1...r]>=num,arr[l,p2-1]<=num，因为[l,p2-1]范围比[l,p1-1]小，后者满足<=num
-//                swap(arr,l,p2);//进行了尾部的定制，使用while(true),当p1>=p2的时候是p1和p2交换了。
-//                break;
-//            }else {
-//                swap(arr,p1,p2);
-//            }
-//        }
-        //一定要使用while(++p1<=r&&arr[p1]<num) 而不能使用while(p1<=r&&arr[p1]<num) p1++;
-        //因为后者如果p1和p2都是等于num的就会陷入无限循环
-        while(p1<=p2){//上面那段代码和下面这段代码都ok
+        int p1=l;//p1左边（包括自己）都是<=num
+        int p2=r+1;//p2右边（包括自己）都是>=num
+        //使用while(++p1<=r&&arr[p1]<num) 而不是while(p1<=r&&arr[p1]<num) p1++;
+        //因为后者如果p1和p2都是等于num的就会陷入无限循环，因为两个循环都不会改变p1和p2的值，走不出大循环
+        while(p1<p2){//这里等号加和不加都可以 原因A
             while(++p1<=r&&arr[p1]<num);//越界了说明最后一个位置是arr[l]应该放的位置，p2一定会左移一位来到这个位置
-            while(--p2>=l-1&&arr[p2]>num);//越界了说明此时p2也是arr[l]应该放的位置
-//            if (p1<p2) swap(arr,p1,p2);//移动完自己去判断外循环条件
-//            else swap(arr,l,p2);//在while里面的最后一次循环进这个分支
+            while(--p2>=l&&arr[p2]>num);//越界了说明此时p2也是arr[l]应该放的位置
             swap(arr,p1<p2?p1:l,p2);
         }
         return p2;
@@ -205,40 +199,28 @@ public class Code06_QuickSort {
 
     public static void testForArr() {//参数为arr
         ArrayUtil arrayUtil = new ArrayUtil();
-        int times = 1000;//测试次数
+        int times = 100000;//测试次数
         long time1 = 0, time2 = 0;
         boolean isok = true;
         int maxSize = 100;//数组大小在[0~maxSize]随机
-        int maxValue = 100;//数组的值在[0,maxValue]随机
-//        int parameter1=0;//测试函数的参数
-//        int maxParameter1=100;//参数1在[0,maxParameter1]随机
+        int maxValue = 1000;//数组的值在[0,maxValue]随机
         int[] t1 = null, t2 = null;
-
         int res1 = 0, res2 = 0;
         for (int i = 0; i < times; i++) {
-
-//            parameter1=arrayUtil.ran(maxParameter1);
-
             t1 = arrayUtil.generateRandomArr(arrayUtil.ran(maxSize), maxValue);
-            t2=arrayUtil.copyArray(t1);
-
-//            t1=arrayUtil.generateRandomArr(arrayUtil.ran(maxSize),1,maxValue);//正数数组[1,maxValue]
-//            t2 = arrayUtil.generateRandomArr(arrayUtil.ran(maxSize), 1, maxValue);//正数数组[1,maxValue]
-
+            t2= arrayUtil.copyArray(t1);
             long l = System.currentTimeMillis();
             quickSort(t1);
             time1 += System.currentTimeMillis() - l;
             l = System.currentTimeMillis();
             quickSort2(t2);
             time2 += System.currentTimeMillis() - l;
-            if (isEqual(t1,t2)) {
+            if (!isEqual(t1,t2)) {
                 isok = false;
                 break;
             }
         }
         arrayUtil.printArr(t1);//打印参数
-//        arrayUtil.printArr(t2);//打印参数
-//        System.out.println("parameter1:"+parameter1);//打印参数
         if (isok) System.out.println("m1 cost " + time1 + "ms");
         System.out.println(res1);//针对返回值的操作
         if (isok) System.out.println("m2 cost " + time2 + "ms");
@@ -247,28 +229,6 @@ public class Code06_QuickSort {
     }
     // for test
     public static void main(String[] args) {
-        int testTime = 10;
-        int maxSize = 100;
-        int maxValue = 100;
-        boolean succeed = true;
-        for (int i = 0; i < testTime; i++) {
-            int[] arr1 = generateRandomArray(maxSize, maxValue);
-            int[] arr2 = copyArray(arr1);
-            quickSort2(arr1);
-            comparator(arr2);
-            if (!isEqual(arr1, arr2)) {
-                succeed = false;
-                printArray(arr1);
-                printArray(arr2);
-                break;
-            }
-        }
-        System.out.println(succeed ? "Nice!" : "Fucking fucked!");
-
-        int[] arr = generateRandomArray(maxSize, maxValue);
-        printArray(arr);
-        quickSort(arr);
-        printArray(arr);
-
+        testForArr();
     }
 }

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="17">
-      <module name="AlgorithmZuoByWang" target="" />
+      <module name="AlgorithmZuoByWang" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
