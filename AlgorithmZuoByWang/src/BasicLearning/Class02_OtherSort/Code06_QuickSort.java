@@ -104,8 +104,25 @@ public class Code06_QuickSort {
             while(--p2>=l&&arr[p2]>num);//越界了说明此时p2也是arr[l]应该放的位置
             swap(arr,p1<p2?p1:l,p2);
         }
-        //以下两种p1++的写法，不适用于 <num ，因为如果arr[p1]=arr[p2]的时候会卡住不动
-        //和上面项目，p1++的这种写法由于只能是<=num,在重复元素比较多的时候容易走极端，难以划分到中间位置
+        //使用p1++的形式，实现<num的算法
+        int p1=l+1,p2=r;
+        while(p1<=p2){
+            while(p1<=r&&arr[p1]<num) p1++;
+            while(p2>=l&&arr[p2]>num) p2--;
+            if(p1<=p2){
+                swap(arr,p1,p2);
+                if(p1<=r&&arr[p1]==num&&p2>=l&&arr[p2]==num){
+                    p1++;p2--;
+                }
+            }else{
+                swap(arr,p2,l);
+                break;
+            }
+        }
+
+        
+        //和<num的算法相比，下面的写法在重复元素比较多的时候容易走极端，难以划分到中间位置
+        //如果算法可以保证不会在一开始把l位置的元素交换了，那么p1就可以初始化为l
         // int p1=l,p2=r;//如果大循环是p1<p2，则p1需要设置为l，而不是l+1，因为当只有两个元素的时候进不去大循环
         // while(p1<p2){
         //     while(p1<=r&&arr[p1]<=num)p1++;
