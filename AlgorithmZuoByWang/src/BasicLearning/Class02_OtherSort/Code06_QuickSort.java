@@ -104,6 +104,18 @@ public class Code06_QuickSort {
             while(--p2>=l&&arr[p2]>num);//越界了说明此时p2也是arr[l]应该放的位置
             swap(arr,p1<p2?p1:l,p2);
         }
+        // int p1=l,p2=r;//如果大循环是p1<p2，则p1需要设置为l，而不是l+1，因为当只有两个元素的时候进不去大循环
+        // while(p1<p2){
+        //     while(p1<=r&&arr[p1]<=num)p1++;
+        //     while(p2>=l+1&&arr[p2]>=num)p2--;//p2不能越过l位置
+        //     swap(arr,p1<p2?p1:l,p2);
+        // }
+        // int p1=l+1,p2=r;//如果大循环是p1<=p2,则p1初始值可以为l+1
+        // while(p1<=p2){
+        //     while(p1<=r&&arr[p1]<=num)p1++;
+        //     while(p2>=l+1&&arr[p2]>=num)p2--;//p2不能越过l位置
+        //     swap(arr,p1<p2?p1:l,p2);
+        // }
         return p2;
     }
 
