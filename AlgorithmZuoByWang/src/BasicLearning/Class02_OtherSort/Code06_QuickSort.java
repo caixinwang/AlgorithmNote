@@ -105,20 +105,20 @@ public class Code06_QuickSort {
             swap(arr,p1<p2?p1:l,p2);
         }
         //使用p1++的形式，实现<num的算法
-        int p1=l+1,p2=r;
-        while(p1<=p2){
-            while(p1<=r&&arr[p1]<num) p1++;
-            while(p2>=l&&arr[p2]>num) p2--;
-            if(p1<=p2){
-                swap(arr,p1,p2);
-                if(p1<=r&&arr[p1]==num&&p2>=l&&arr[p2]==num){
-                    p1++;p2--;
-                }
-            }else{
-                swap(arr,p2,l);
-                break;
-            }
-        }
+        // int p1=l+1,p2=r;
+        // while(p1<=p2){
+        //     while(p1<=r&&arr[p1]<num) p1++;
+        //     while(p2>=l&&arr[p2]>num) p2--;
+        //     if(p1<=p2){
+        //         swap(arr,p1,p2);
+        //         if(p1<=r&&arr[p1]==num&&p2>=l&&arr[p2]==num){
+        //             p1++;p2--;
+        //         }
+        //     }else{
+        //         swap(arr,p2,l);
+        //         break;
+        //     }
+        // }
 
         
         //和<num的算法相比，下面的写法在重复元素比较多的时候容易走极端，难以划分到中间位置
