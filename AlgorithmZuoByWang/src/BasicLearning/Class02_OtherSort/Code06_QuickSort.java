@@ -86,6 +86,8 @@ public class Code06_QuickSort {
      * 则根据循环不变量，p1和p2交叉的时候已经满足l~p2均是<=num的数，p2+1~r都是>=num的数，这样就可以将l与p2交换，实现划分的功能
      * 
      * 关键：p1和p2交叉的时机就是算法完成的时机，需要妥当的进行swap
+     * 外循环的作用：1.确保第一次能进去 2.确保划分完毕之后（swap(arr,p2,l)）可以通过它退出循环
+     *     根据这两个作用，如果我们自己控制退出外循环，那么就while(true)即可。
      */
     private static int partition2(int[] arr,int l,int r){//由于是在快排中调用，所以r>l，即至少两个元素
         //根据循环不变量，从内循环走出的时候，p1所在位置是第一个>=num的第一个数（或越界），p2同理，如果没有碰撞则还没有划分完毕，交换p1和p2位置
@@ -108,7 +110,7 @@ public class Code06_QuickSort {
         //与++p不同，p++这种写法不会上来就修改p的值，所以p1==p2的时候需要swap之后手动退出。外循环取了等号，因为要使只有两个元素
         //的时候也能进入外循环
         // int p1=l+1,p2=r;
-        // while(p1<=p2){
+        // while(p1<=p2){//while(true)
         //     while(p1<=r&&arr[p1]<num) p1++;
         //     while(p2>=l&&arr[p2]>num) p2--;
         //     if(p1<=p2){
