@@ -106,32 +106,30 @@ public class Code01_BST<Key extends Comparable<Key>, Value> {
     }
 
     /**
-     * 思路：观察运动路径可以得出，运动轨迹就是沿着x结点一直向下直到找到空节点或者key结点才开始返回。
-     * 1. 如果在最底层是最先通过key结点返回的话，沿途的结点就直接一路把这个key结点往上扔。
-     * 2. 如果在最底层是最先通过空结点返回的话，沿途的结点除了最底层结点的父亲结点是返回自己，
-     * 其它的结点都是返回最底层结点的父亲结点，把它一路往上扔。可以看做把null做了替换，
-     * 不是扔null，而是通过一个if-else来把null换成了空节点的父亲，然后再把父亲一路扔
-     * 3. 这个函数和get很像
      *
-     * @param x:找出以x为根节点的子树中小于key的最大结点
-     * @param key:
+     * @param x:找出以x为根节点的子树中小于等于key的最大结点
+     * @param target:
      * @return
      */
-    private Node floor(Node x, Key key) {
+    private Node floor(Node x, Key target) {
         if (x == null) return null;
-        if (key == null) throw new IllegalArgumentException();
-        int compare = key.compareTo(x.key);
-        if (compare < 0) {
-            return floor(x.left, key);
+        if (target == null) throw new IllegalArgumentException();
+        int compare = x.key.compareTo(target);
+        if (compare > 0) {
+            //说明x结点以及它的右树都是大于target的,只能往左树去找
+            return floor(x.left, target);
         } else if (compare == 0) {
+            //右树大于x 也大于target 不符合条件 x本身此时就是答案
             return x;
         } else {
-            Node t = floor(x.right, key);
-            if (t == null) return x;
-            else return t;
+            //x<target 右树有可能也小于target 所以还需要递归往右边去找
+            Node t = floor(x.right, target);
+            if (t == null) return x;//为空说明右边找不到 返回x
+            else return t;//否则说明右树也有满足条件的 返回右树的那个答案
         }
     }
 
+    //返回第k大的key (从0开始计数)
     public Key select(int k) {
         return select(root, k).key;
     }
@@ -144,16 +142,17 @@ public class Code01_BST<Key extends Comparable<Key>, Value> {
         return x;
     }
 
-    public int rank(Key key) {
-        return rank(root, key);
+    //判断target排第几 (从0开始算)
+    public int rank(Key target) {
+        return rank(root, target);
     }
 
-    private int rank(Node x, Key key) {
+    private int rank(Node x, Key target) {
         if (x == null) return 0;
-        if (key == null) throw new IllegalArgumentException();
-        int compare = key.compareTo(x.key);
-        if (compare < 0) return rank(x.left, key);
-        if (compare > 0) return size(x.left) + 1 + rank(x.right, key);
+        if (target == null) throw new IllegalArgumentException();
+        int compare = x.key.compareTo(target);
+        if (compare > 0) return rank(x.left, target);
+        if (compare < 0) return size(x.left) + 1 + rank(x.right, target);
         return size(x.left);
     }
 
@@ -178,20 +177,20 @@ public class Code01_BST<Key extends Comparable<Key>, Value> {
         delete(root , key);
     }
 
-    private Node delete(Node x, Key key) {
+    private Node delete(Node x, Key target) {
         if (x==null) return null;
-        if (key==null) throw new IllegalArgumentException();
-        int compare = key.compareTo(x.key);
-        if (compare<0){
-            x.left=delete(x.left,key);
-        } else if (compare > 0) {
-            x.right=delete(x.right,key);
+        if (target==null) throw new IllegalArgumentException();
+        int compare = x.key.compareTo(target);
+        if (compare > 0){
+            x.left=delete(x.left,target);
+        } else if (compare < 0) {
+            x.right=delete(x.right,target);
         }else {
             if (x.left==null) return x.right;
-            if (x.right==null)return x.left;
+            if (x.right==null) return x.left;
             Node t=x;
             x=min(x.right);
-            x.right=deleteMin(t.right);
+            x.right=deleteMin(t.right);//x还在t.right上面 需要删除 脱离出t的子树 才能做t的父节点
             x.left=t.left;
         }
         x.N=size(x.left)+size(x.right)+1;
@@ -213,8 +212,8 @@ public class Code01_BST<Key extends Comparable<Key>, Value> {
         int cmplo = lo.compareTo(x.key);
         int cmphi = hi.compareTo(x.key);
         if (cmplo<0) keys(x.left,queue,lo,hi);
-        if (cmphi>0) keys(x.right,queue,lo,hi);
         if (cmplo<=0&&cmphi>=0) queue.add(x.key);
+        if (cmphi>0) keys(x.right,queue,lo,hi);
     }
 
 

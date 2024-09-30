@@ -3,17 +3,16 @@ package ClassicInterviewCoding.InterviewCoding04;
 public class Code07_SubMatrixMaxSum {
 
 	/**
-	 * 转化为在0~0 0~1 ... 0~n求最大子数组累加和,1~1,...,1~n最大自数组累加和。
+	 * 转化为在0~0 0~1 ... 0~n求最大子数组累加和,1~1,...,1~n最大自数组累加和。也就是固定矩阵的上下边界
 	 * 求0~n-1就是把0~n-1行的数据全部加到一个大小为n的数组arr里面例如。[1,2,3][4,5,6][7,8,9] -->[1+4+7,2+5+8,3+6+9]
 	 * 然后0~n加出来的arr，可以被0~n-1的利用，只需要多加一行上去即可
 	 * @param m 求m的最大子矩阵累加和，
 	 */
 	public static int maxSum(int[][] m) {
-		if (m==null||m.length==0||m[0]==null||m[0].length==0) return Integer.MIN_VALUE;
 		int max=Integer.MIN_VALUE;
-		for (int r1 = 0; r1 < m.length; r1++) {
+		for (int r1 = 0; r1 < m.length; r1++) {//固定上边界
 			int[] arr=new int[m[0].length];//有几列，arr就有多大
-			for (int r2 = r1; r2 < m.length; r2++) {
+			for (int r2 = r1; r2 < m.length; r2++) {//固定下边界
 				for (int i = 0; i < arr.length; i++) {
 					arr[i]+=m[r2][i];//每多一行(r2+1)，就累加到arr上
 				}
@@ -27,7 +26,6 @@ public class Code07_SubMatrixMaxSum {
 	 * @param arr 求arr数组的最大子数组的累加和
 	 */
 	public static int f(int[] arr){
-		if (arr==null||arr.length==0) return Integer.MIN_VALUE;
 		int max=Integer.MIN_VALUE,sum=0;
 		for (int i = 0; i < arr.length; i++) {
 			sum+=arr[i];
@@ -37,8 +35,8 @@ public class Code07_SubMatrixMaxSum {
 		return max;
 	}
 
-	public int[] getMaxMatrix(int[][] m) {//返回子矩阵具体是什么
-		if (m==null||m.length==0||m[0]==null||m[0].length==0) return null;
+	//返回取得最大累加和时的子矩阵位置{row1,col1,row2,col2}
+	public int[] getMaxMatrix(int[][] m) {
 		int max=Integer.MIN_VALUE;
 		int[] ans=null;
 		for (int r1 = 0; r1 < m.length; r1++) {
@@ -58,10 +56,10 @@ public class Code07_SubMatrixMaxSum {
 	}
 
 	/**
+	 * 返回取得的最大累加和以及左右边界
 	 * @param arr 求arr数组的最大子数组的累加和
 	 */
 	public static int[] f2(int[] arr){
-		if (arr==null||arr.length==0) return new int[]{0,0,0};
 		int max=Integer.MIN_VALUE,sum=0;
 		int left=0;
 		int[] ans= new int[]{0,0,0};

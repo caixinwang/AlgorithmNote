@@ -7,7 +7,7 @@ import java.util.TreeSet;
 public class Code02_MaxSubArraySumLessOrEqualK {
 
 
-	public static int getMaxLessOrEqualK(int[] arr, int K) {//暴力
+	public static int getMaxLessOrEqualK(int[] arr, int K) {//暴力尝试
 		int res=Integer.MIN_VALUE,N=arr.length;
 		for (int j = 0; j < N; j++) {
 			for (int i = j; i >= 0 ; i--) {
@@ -22,20 +22,22 @@ public class Code02_MaxSubArraySumLessOrEqualK {
 	}
 
 	/**
-	 * 为保证完全等价转换，set里面得有0，使得[0...j]的情况不会漏掉.
-	 * 转化为找>=sum[0...j]-K且最接近的某一个前缀的值m,这样一来子数组的对应的累加和就是sum[0...j]-m
-	 * @param arr 找到最接近K的子数组累加和.数组不能为空且长度要大于0
+	 * s[j]-s[i]<=K 等价于 s[i]>=s[j]-K
+	 * 为保证完全等价转换，set里面得有0，使得0~j范围的累加和的情况不会漏掉.
+	 * s为前缀和数组 s[i]为arr前i个元素的累加和
+	 * 转化为找>=s[j]-K且最接近的某一个前缀的值sum[x]
+	 * @param arr 找到<=K的最大子数组累加和.数组不能为空且长度要大于0
 	 * @param K K
 	 * @return 返回小于等于K且最接近K的子数组累加和
 	 */
 	public static int getMaxLessOrEqualK2(int[] arr, int K) {
 		TreeSet<Integer> set=new TreeSet<>();//只关心值
-		set.add(0);//使得i等于0的时候sum[0-1]的值对应为0，不会漏掉情况
-		int N=arr.length,res=Integer.MIN_VALUE,sum=0;//sum的含义是0...j的累加和
+		set.add(0);
+		int N=arr.length,res=Integer.MIN_VALUE,sum=0;//sum的含义是前缀和数组的每一个元素
 		for (int j = 0; j < N; j++) {//以j位置结尾
-			sum+=arr[j];//sum[0...j]
-			Integer m=set.ceiling(sum-K);
-			if (m!=null) res = Math.max(res,sum-m);//如果m为空，说明以j结尾的子串没有答案
+			sum+=arr[j];
+			Integer i=set.ceiling(sum-K);//取到>=s[j]-K的最小值
+			if (i!=null) res = Math.max(res,sum-i);//如果m为空，说明以j结尾的子串没有答案
 			set.add(sum);
 		}
 		return res;
