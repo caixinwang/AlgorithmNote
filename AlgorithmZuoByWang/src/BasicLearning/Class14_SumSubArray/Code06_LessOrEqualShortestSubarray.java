@@ -1,9 +1,13 @@
-package Leetcode.AllQuestions;
+package BasicLearning.Class14_SumSubArray;
 
 import TestUtils.ArrayUtil;
 
-public class Leetcode_0862_ShortestSubarrayII {
-    public static int shortestSubarray(int[] nums, int k) {//累加和<=k的最短子数组
+/**
+ * 给你一个整数数组 nums 和一个整数 k ，找出 nums 中累加和 <=k 的 最短非空子数组 ，
+ * 并返回该子数组的长度。如果不存在这样的 子数组 ，返回 -1 。
+ */
+public class Code06_LessOrEqualShortestSubarray {
+    public static int shortestSubarray(int[] nums, int k) {
         int n=nums.length,h=0,t=-1,ans=n+1;
         int[] dq=new int[n+1];
         long[] s=new long[n+1];
