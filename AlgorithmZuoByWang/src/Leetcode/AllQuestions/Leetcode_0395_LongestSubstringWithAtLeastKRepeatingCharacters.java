@@ -1,8 +1,10 @@
 package Leetcode.AllQuestions;
 
 /**
+ * 题目：给你一个字符串 s 和一个整数 k ，请你找出 s 中的最长子串， 要求该子串中的每一字符出现次数都不少于 k 。返回这一子串的长度。
+ *
  * 利用题目本身的限制，只可能有小写字母，一种可能的做法就是去枚举包含的字母种类，总的也就26种，每种去算一个答案。算的方法就是滑动窗口。
- * 因为只有把种类限制死了，你滑动窗口才有单调性。否则不限制死，是没有单调性的！！
+ * 因为只有把种类限制死 滑动窗口才有单调性。否则不限制死，是没有单调性的！！
  * 假设试到m种已经没答案了，那么m往后你也不用试了，一定没有答案！
  * 固定了种数之后，那么你就有一个欠账表map以及一个欠账数all=types*k。利用76题的解法
  * 或者下面还有一种方法，依然是map，但是用collected表示收集了几种，用satisfy表示收集到的有多少达到k次了。
@@ -93,7 +95,7 @@ public class Leetcode_0395_LongestSubstringWithAtLeastKRepeatingCharacters {//34
 			int all=m*k,diff=0;//同时维护欠账和种数两个字段
 			int[] cnt=new int[128];
 			for (int l=0,r=0;l<n;){//固定l,r能扩就扩
-				while(r<n&&!(diff==m&&cnt[str[r]]==0)){//先搞定种数
+				while(r<n&&!(diff==m&&cnt[str[r]]==0)){//先搞定种数,再搞定个数（扩到即将不满足）
 					if (cnt[str[r]]<k) all--;
 					if (cnt[str[r]]==0) diff++;
 					cnt[str[r++]]++;

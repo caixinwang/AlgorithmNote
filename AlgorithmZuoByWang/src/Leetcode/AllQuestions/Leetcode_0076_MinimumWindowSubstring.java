@@ -4,6 +4,10 @@ import TestUtils.StringUtil;
 
 import java.util.HashMap;
 
+/**
+ * 给你一个字符串 s 、一个字符串 t 。返回 s 中涵盖 t 所有字符的最小子串。
+ * 如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 "" 。
+ */
 public class Leetcode_0076_MinimumWindowSubstring {
 
     public String minWindow(String big, String small) {//滑动窗口，推荐第二种方法，因为用一个变量代替了isok函数

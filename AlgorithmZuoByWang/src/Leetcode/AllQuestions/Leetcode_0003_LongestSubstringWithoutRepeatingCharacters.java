@@ -6,7 +6,33 @@ import TestUtils.StringUtil;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class Leetcode_0003_LongestSubstringWithoutRepeatingCharacters {//无重复字符的最长子串
+/**
+ * 给定一个字符串 s ，请你找出其中不含有重复字符的最长子串的长度。
+ */
+public class Leetcode_0003_LongestSubstringWithoutRepeatingCharacters {
+
+    public static int lengthOfLongestSubstring0(String s) {//动态规划
+        char[] str = s.toCharArray();
+        int N=str.length;
+        int[]dp=new int[N];//dp[i]以i开头的最长不重复子串
+        int[] map=new int[128];
+        Arrays.fill(map,-1);
+        dp[N-1]=1;
+        map[str[N-1]]=N-1;
+        for(int i=N-2;i>=0;i--){
+            //  .....  i  i+1  ......  end .............
+            //                     ^              ^
+            //                  map[str[i]]    map[str[i]
+            int end=i+dp[i+1];//end为dp[i+1]对应的子串的右端点
+            if (map[str[i]]==-1||map[str[i]]>end){//说明在dp[i+1]对应的子串内加上str[i]不会产生重复
+                dp[i]=1+dp[i+1];
+            }else{//反之说明重复的字符串出现在dp[i+1]对应的子串里面，我们取[i,map[str[i]-1]这一部分
+                dp[i]=map[str[i]]-i;
+            }
+            map[str[i]]=i;
+        }
+        return Arrays.stream(dp).max().getAsInt();
+    }
 
     /**
      * dp[i]为必须以i结尾不含重复字符的最长子串
@@ -128,18 +154,50 @@ public class Leetcode_0003_LongestSubstringWithoutRepeatingCharacters {//无重�
         return ans;
     }
 
-    static StringUtil su=new StringUtil();
     public static void main(String[] args) {
-        for (int i = 0; i < 1000; i++) {
-            String s=su.generateRandom_all_String(su.ran(1,50));
-            int ans1=lengthOfLongestSubstring7(s);
-            int ans2=lengthOfLongestSubstring2(s);
-            if (ans1!=ans2) {
-                System.out.println("oops!");
-                break;
+        test();
+    }
+
+    public static void test(){
+        System.out.println("test begin");
+        out:
+        for (int i = 0; i < 10000; i++) {
+            String str = generateRandomString( 20);
+            int[] res = new int[]{
+                    lengthOfLongestSubstring0(str),
+                    lengthOfLongestSubstring1(str),
+                    lengthOfLongestSubstring2(str),
+                    lengthOfLongestSubstring3(str),
+                    lengthOfLongestSubstring4(str),
+                    lengthOfLongestSubstring5(str),
+                    lengthOfLongestSubstring6(str),
+                    lengthOfLongestSubstring7(str),
+            };
+            for (int j = 0; j < res.length; j++) {
+                if (res[j] != res[0]) {
+                    System.out.println(str);
+                    for (int re : res) {
+                        System.out.println(re);
+                    }
+                    break out;
+                }
             }
         }
+        System.out.println("test finish");
     }
+
+    public static int g(int l,int r){
+        return (int)(Math.random()*(r-l+1)+l);
+    }
+
+    public static String generateRandomString(int len){
+        StringBuilder sb=new StringBuilder();
+        for (int i = 0; i < len; i++) {
+            sb.append((char)g('A','z'));
+        }
+        return sb.toString();
+    }
+
 
 
 }
