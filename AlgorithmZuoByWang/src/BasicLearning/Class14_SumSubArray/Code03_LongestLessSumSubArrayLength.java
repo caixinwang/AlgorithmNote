@@ -7,7 +7,8 @@ import java.util.Arrays;
  */
 public class Code03_LongestLessSumSubArrayLength {
 
-    public static int solution(int[] arr,int k){//一定正确，暴力枚举
+    //暴力枚举
+    public static int solution(int[] arr,int k){
         int N=arr.length;
         int[] s=new int[N+1];
         for (int i = 0; i < arr.length; i++) {
@@ -22,6 +23,7 @@ public class Code03_LongestLessSumSubArrayLength {
         return res;
     }
 
+    //动态规划+滑动窗口
     public static int solution1(int[] arr, int k) {
         int N = arr.length;
         int[] f = new int[N];//f[i]:以i为左端点的所有子数组所能达到的最小累加和
@@ -53,6 +55,7 @@ public class Code03_LongestLessSumSubArrayLength {
         return res;
     }
 
+    //固定右端点的二分
     public static int solution2(int[] arr, int k) {
         int n = arr.length, ans = 0, sum = 0;
         int[] up = new int[n + 1];
@@ -61,7 +64,7 @@ public class Code03_LongestLessSumSubArrayLength {
             up[i + 1] = sum > up[i] ? sum : up[i];
         }
         sum = 0;
-        for (int i = 1; i <= n; i++) {//脑补遍历前缀和数组s
+        for (int i = 1; i <= n; i++) {//脑补遍历前缀和数组s,i从1开始 因为右端点需要>0
             sum += arr[i - 1];//s[i]
             int l = 0, r = i - 1, m;
             while (l <= r) {//在一个非递减序列up中找>=sum-k的最左
@@ -74,6 +77,7 @@ public class Code03_LongestLessSumSubArrayLength {
         return ans;
     }
 
+    //固定右端点的单调栈做法
     public static int solution3(int[] arr, int k) {
         int N = arr.length;
         int[] s = new int[N + 1];
@@ -93,6 +97,7 @@ public class Code03_LongestLessSumSubArrayLength {
         return ans;
     }
 
+    //固定左端点的二分
     public static int solution4(int[] arr, int k){
         int N = arr.length;
         int[] s = new int[N + 1];
@@ -118,6 +123,7 @@ public class Code03_LongestLessSumSubArrayLength {
         return res;
     }
 
+    //固定左端点的单调栈做法
     public static int solution5(int[] arr, int k){
         int N = arr.length;
         int[] s = new int[N + 1];
@@ -133,6 +139,29 @@ public class Code03_LongestLessSumSubArrayLength {
         for (int i=0;i<N;i++){
             while(t!=-1&&s[q[t]]-s[i]<=k) {
                 res = Math.max(res, q[t--]-i);
+            }
+        }
+        return res;
+    }
+
+    //固定左端点的单调队列做法
+    public static int solution6(int[] arr, int k){
+        int N = arr.length;
+        int[] s = new int[N + 1];
+        for (int i = 1; i <= N; i++){
+            s[i]=s[i-1]+arr[i-1];
+        }
+        int[] q=new int[N+1];//固定左端点
+        int t=-1,h=0;
+        for (int i=1;i<=N;i++){
+            //右边的更长，并且更容易满足条件，那么之前的更差的位置就可以淘汰了
+            while(t>=h&&s[i]<s[q[t]])  t--;
+            q[++t]=i;
+        }
+        int res=0;
+        for (int i=0;i<N;i++){
+            while(t>=h&&s[q[h]]-s[i]<=k) {
+                res = Math.max(res, q[h++]-i);
             }
         }
         return res;
