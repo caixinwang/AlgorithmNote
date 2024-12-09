@@ -57,6 +57,25 @@ public class Code01_KMP {
         return res;
     }
 
+    private static int kmp2(String str, String target) {
+        char[] s = str.toCharArray();
+        char[] t = target.toCharArray();
+        int N=s.length,M=t.length;
+        int[]f=new int[M+1];
+        f[0]=-1;
+        f[1]=0;
+        for (int i=2;i<=M;i++){
+            int len=f[i-1];
+            while(len!=-1&&t[len]!=t[i-1]) len=f[len];
+            f[i]=len+1;
+        }
+        for(int i=0,j=0;i<N;i++){
+            while(j!=-1&&s[i]!=t[j]) j=f[j];
+            if (++j==M) return i-M+1;
+        }
+        return -1;
+    }
+
     private static int baoli(String str,String match){
         if (str==null||match==null||match.length()<1||str.length()<match.length()) return -1;
         char[] s1 = str.toCharArray();
@@ -96,7 +115,7 @@ public class Code01_KMP {
         for (int i = 0; i < testTimes; i++) {
             String str = getRandomString(possibilities, strSize);
             String match = getRandomString(possibilities, matchSize);
-            if (kmp(str, match) != baoli(str,match)) {
+            if (kmp2(str, match) != baoli(str,match)) {
                 System.out.println("Oops!");
             }
         }
