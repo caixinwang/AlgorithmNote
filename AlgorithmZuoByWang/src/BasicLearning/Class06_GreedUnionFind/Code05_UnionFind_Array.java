@@ -3,8 +3,9 @@ package BasicLearning.Class06_GreedUnionFind;
 import java.util.Arrays;
 
 /**
- * 当你的V 也就是数据是编号0~n-1的时候，可以将nodes、parents、size揉到一个数组里面
- * 用数组的正负来代表是不是代表结点，用负数的绝对值代表结点所在集合的元素个数；正数的值代表parent是谁
+ * 当你的K 也就是数据是编号0~n-1的时候，可以将nodes、parents、size揉到一个数组里面
+ * 用数组的正负来表示是不是代表结点。
+ * parent[i],正数表示i结点的父结点的编号，负数表示结点i是代表结点 且绝对值的含义代表i结点所在集合元素的个数
  */
 public class Code05_UnionFind_Array {//数组实现
 
